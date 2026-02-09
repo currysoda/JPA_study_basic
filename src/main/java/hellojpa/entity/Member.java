@@ -1,5 +1,7 @@
 package hellojpa.entity;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -30,9 +32,14 @@ public class Member {
 	@Column(name = "member_name")
 	private String name;
 	
-	@Embedded
-	@Column(name = "member_address")
+	@Embedded // 값 타입
 	private Address address;
+	
+	@Embedded
+	@AttributeOverrides({
+		@AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode"))
+	}) // 값 타입을 새로 매핑
+	private Address workAddress;
 	
 	@Builder
 	public Member(Long id, String name, Address address) {
