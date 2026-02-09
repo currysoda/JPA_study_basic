@@ -12,11 +12,13 @@
 
 			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
 
+			<property name="hibernate.hbm2ddl.auto" value="create"/>
+
+			<!-- sql 표시 밑 보기 편하게 칠하기 -->
 			<property name="hibernate.show_sql" value="true"/>
 			<property name="hibernate.format_sql" value="true"/>
+			<property name="hibernate.highlight_sql" value="true"/>
 			<property name="hibernate.use_sql_comments" value="true"/>
-
-			<property name="hibernate.hbm2ddl.auto" value="create"/>
 		</properties>
 	</persistence-unit>
 
