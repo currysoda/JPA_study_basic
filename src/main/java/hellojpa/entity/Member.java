@@ -1,7 +1,10 @@
 package hellojpa.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
@@ -18,12 +21,17 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
 public class Member {
-
+	
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "member_id")
 	private Long id;
+	
+	@Column(name = "member_name")
 	private String name;
 	
 	@Embedded
+	@Column(name = "member_address")
 	private Address address;
 	
 	@Builder

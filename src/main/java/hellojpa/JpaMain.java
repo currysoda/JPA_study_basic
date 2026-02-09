@@ -74,12 +74,16 @@ public class JpaMain {
 		{
 			// 트랜잭션에서 수행된 작업을 모두 취소하고 트랜잭션 실행 이전의 상태로 되돌린다.
 			tx.rollback();
+			System.out.println("=== 문제 발생 ===");
+			System.out.println("=== 트랜잭션 롤백 ===");
 		}
 		
 		finally
 		{
-			// 사용 후 엔티티 매니저 반환
+			// 사용 후 엔티티 매니저 반환(필수)
 			em.close();
+			System.out.println("=== 최종 작업 ===");
+			System.out.println("=== 엔티티 매니저 반환 ===");
 		}
 		
 		// 애플리케이션 종료시 엔티티 매니저 팩토리 종료

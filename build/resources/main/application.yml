@@ -1,0 +1,30 @@
+spring:
+    datasource:
+        # JDBC 설정 (Jakarta Persistence 기반)
+        driver-class-name: org.h2.Driver
+        url: jdbc:h2:tcp://localhost/~/test # TCP 접속 모드
+        username: sa
+        password:
+
+    jpa:
+        # Hibernate 옵션
+        hibernate:
+            ddl-auto: create # persistence.xml의 hbm2ddl.auto와 동일
+
+        show-sql: true # SQL 출력 여부
+
+        properties:
+            hibernate:
+                format_sql: true # SQL 가독성 좋게 출력
+                use_sql_comments: true # SQL에 주석 추가 (쿼리 위치 등 확인용)
+                dialect: org.hibernate.dialect.H2Dialect # H2 방언 설정
+
+logging:
+    level:
+        root: info
+        # JPA 쿼리 파라미터 확인 (Log4j2에서도 동일하게 작동)
+        org.hibernate.orm.jdbc.bind: trace
+
+    pattern:
+        # Log4j2 스타일의 콘솔 패턴 설정
+        console: "%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"
