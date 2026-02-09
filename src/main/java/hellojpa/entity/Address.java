@@ -20,6 +20,7 @@ import lombok.Value;
 public class Address {
 
 	private int zipcode;
+	private String locationName;
 	
 	// 생성자는 어노테이션이 만들어준다.
 	// public Address(int zipcode) {

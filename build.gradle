@@ -1,0 +1,48 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.2.2' // JDK 21 지원 버전
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+// 현대적인 Gradle의 자바 버전 설정 방식 (Toolchain)
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	// Spring Boot BOM (의존성 버전 관리 도구)
+	implementation platform('org.springframework.boot:spring-boot-dependencies:3.2.2')
+
+	// JPA & H2 (기본 로깅 제거)
+	implementation('org.springframework.boot:spring-boot-starter-data-jpa') {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
+	runtimeOnly 'com.h2database:h2'
+
+	// Log4j2 & YAML 설정 지원
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+	implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// Lombok 설정 (컴파일 시점에만 필요하고, 어노테이션 프로세서가 핵심입니다)
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// 테스트 환경에서도 Lombok을 사용한다면 추가
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
