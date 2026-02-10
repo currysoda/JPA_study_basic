@@ -6,4 +6,6 @@ gradle application.yml 사용으로 변경함
 
 logback.xml -> log4j 사용하고 application.yml 에 설정 통합
 
+persistence.xml 은 필수 -> spring 없이 JPA 만 사용하려면
+
 
