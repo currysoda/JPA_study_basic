@@ -19,7 +19,7 @@ import lombok.Setter;
 
 @Entity(name = "Member")
 @Getter
-@Setter
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
 public class Member {
@@ -30,21 +30,24 @@ public class Member {
 	private Long id;
 	
 	@Column(name = "member_name")
+	@Setter
 	private String name;
 	
-	@Embedded // 값 타입
-	private Address address;
+	// @Embedded // 값 타입
+	// private Address address;
+	//
+	// @Embedded // 값 타입 구조인데 column_name 을 다르게 해야하는 경우
+	// @AttributeOverrides({
+	// 	@AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode")),
+	// 	@AttributeOverride(name = "locationName", column = @Column(name = "work_locationName"))
+	// }) // 값 타입을 새로 매핑
+	// private Address workAddress;
 	
-	@Embedded
-	@AttributeOverrides({
-		@AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode"))
-	}) // 값 타입을 새로 매핑
-	private Address workAddress;
-	
+	// id 는 자동 생성 전략
 	@Builder
-	public Member(Long id, String name, Address address) {
-		this.id = id;
+	public Member(String name) {
+		// this.id = id;
 		this.name = name;
-		this.address = address;
+		// this.address = address;
 	}
 }

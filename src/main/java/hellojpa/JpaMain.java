@@ -20,22 +20,17 @@ public class JpaMain {
 		
 		try
 		{
-			Address address1 = Address.builder()
-			                          .zipcode(12345)
-			                          .locationName("temp name")
-			                          .build();
-			
-			Member member = Member.builder()
+			// 필요한 데이터
+			Member member1 = Member.builder()
 			                      .id(1L)
 			                      .name("helloA")
-			                      .address(address1)
 			                      .build();
 			
 			
 			System.out.println("=== BEFORE ===");
 			// 영속성 컨텍스트가 관리함
 			// persist 단계에서는 쿼리를 DB 에 반영하지 않음
-			em.persist(member);
+			em.persist(member1);
 			System.out.println("=== AFTER ===");
 			
 			// 1차 캐시에서 조회
@@ -57,9 +52,7 @@ public class JpaMain {
 			System.out.println("(result3 == result4) = " + (result3 == result4));
 			
 			// 변경 감지
-			Member member1 = Member.builder().id(3L).name("helloC").build();
 			
-			Member member2 = em.find(Member.class, 3L);
 			
 			// 변경 후 명시적인 update 문 혹은 메소드가 없어도 영속성 컨텍스트가 변경내용을 DB에 반영한다.
 			member2.setName("HI I'M C");
@@ -72,6 +65,7 @@ public class JpaMain {
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			// 트랜잭션에서 수행된 작업을 모두 취소하고 트랜잭션 실행 이전의 상태로 되돌린다.
 			tx.rollback();
 			System.out.println("=== 문제 발생 ===");
