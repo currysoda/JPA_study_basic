@@ -4,6 +4,14 @@
 	xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
 
 	<persistence-unit name="hello">
+
+		<!--		자동 스캔 정상작동 안함 Spring 과 같이쓰면 해결되니 일단 수동 등록-->
+		<!--		<exclude-unlisted-classes>false</exclude-unlisted-classes>-->
+
+		<!--		수동 등록 @Entity 붙은 클래스 하나하나 직접 입력해야함-->
+		<!--		<class>hellojpa.entity.Member</class>-->
+		<!--		<class>hellojpa.entity.Team</class>-->
+
 		<properties>
 			<property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
 			<property name="jakarta.persistence.jdbc.user" value="sa"/>
@@ -13,8 +21,9 @@
 
 			<property name="hibernate.hbm2ddl.auto" value="create"/>
 
-			<!-- 순수 JPA 실행 환경에서 @Entity 자동 감지 -->
-			<property name="hibernate.archive.autodetection" value="class"/>
+			<!-- Hibernate 6.x에서 엔티티 자동 감지 설정 -->
+			<!-- class: @Entity 어노테이션이 있는 클래스 자동 스캔 -->
+			<!--			<property name="hibernate.archive.autodetection" value="class"/>-->
 
 			<!-- sql 표시 밑 보기 편하게 칠하기 -->
 			<property name="hibernate.show_sql" value="true"/>

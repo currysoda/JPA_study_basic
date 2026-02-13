@@ -19,10 +19,10 @@ import lombok.Setter;
 public class Team {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "team_id")
 	private Long id;
-
+	
 	@Column(name = "team_name")
 	private String name;
 }

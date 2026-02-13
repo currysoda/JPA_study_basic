@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <!-- 콘솔 출력용 Appender (색상 지원) -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!-- 색상이 있는 패턴 - ERROR와 스택 트레이스를 빨간색으로 표시 -->
+            <PatternLayout 
+                pattern="%d{HH:mm:ss.SSS} %highlight{%-5level}{FATAL=red blink, ERROR=red bold, WARN=yellow bold, INFO=green, DEBUG=cyan, TRACE=blue} %style{%logger{36}}{bright cyan} - %highlight{%msg%n%throwable}{FATAL=red bold, ERROR=red bold, WARN=default, INFO=default, DEBUG=default, TRACE=default}" 
+                charset="UTF-8"
+                disableAnsi="false"/>
+        </Console>
+    </Appenders>
+    
+    <Loggers>
+        <!-- Hibernate SQL 로그 -->
+        <Logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        
+        <!-- Hibernate 파라미터 바인딩 로그 -->
+        <Logger name="org.hibernate.orm.jdbc.bind" level="TRACE" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        
+        <!-- Hibernate 기타 로그 -->
+        <Logger name="org.hibernate" level="INFO" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        
+        <!-- 루트 로거 -->
+        <Root level="INFO">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
