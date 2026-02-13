@@ -19,7 +19,6 @@ import lombok.Setter;
 
 @Entity(name = "Member")
 @Getter
-
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
 public class Member {
