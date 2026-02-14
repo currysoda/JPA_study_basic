@@ -1,7 +1,8 @@
 package hellojpa;
 
 import eu.infomas.annotation.AnnotationDetector;
-import hellojpa.jpamethod.DataInput;
+import hellojpa.jpamethod.DataCompare;
+import hellojpa.jpamethod.DataCRUD;
 import jakarta.persistence.*;
 import java.lang.annotation.Annotation;
 import java.nio.charset.StandardCharsets;
@@ -57,7 +58,7 @@ public class JpaMain {
 		// 데이터 입력
 		try
 		{
-			DataInput.insertH2data(em);
+			DataCRUD.InsertData(em);
 		}
 		
 		catch (Exception e)
@@ -75,7 +76,7 @@ public class JpaMain {
 		
 		try
 		{
-		
+			DataCompare.dataCompare(em);
 		}
 		
 		catch (Exception e)
@@ -87,6 +88,12 @@ public class JpaMain {
 		{
 			em.close();
 		}
+		
+		// 데이터 읽기
+		
+		// 데이터 수정
+		
+		// 데이터 삭제
 		
 		
 		// 애플리케이션 종료시 엔티티 매니저 팩토리 종료
