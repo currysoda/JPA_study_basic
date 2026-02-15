@@ -90,11 +90,59 @@ public class JpaMain {
 		}
 		
 		// 데이터 읽기
+		em = emf.createEntityManager();
+		
+		try
+		{
+			DataCRUD.readData(em);
+		}
+		
+		catch (Exception e)
+		{
+			// Log4j2 Logger를 사용하여 ERROR 레벨로 빨간색 출력
+			log.error("메소드 내부 문제 발생!", e);
+		}
+		finally
+		{
+			em.close();
+		}
 		
 		// 데이터 수정
+		em = emf.createEntityManager();
+		
+		try
+		{
+			DataCRUD.updateData(em);
+		}
+		
+		catch (Exception e)
+		{
+			// Log4j2 Logger를 사용하여 ERROR 레벨로 빨간색 출력
+			log.error("메소드 내부 문제 발생!", e);
+		}
+		finally
+		{
+			em.close();
+		}
 		
 		// 데이터 삭제
+		em = emf.createEntityManager();
 		
+		System.out.println("데이터 삭제 예제 시작");
+		try
+		{
+			DataCRUD.deleteData(em);
+		}
+		
+		catch (Exception e)
+		{
+			// Log4j2 Logger를 사용하여 ERROR 레벨로 빨간색 출력
+			log.error("메소드 내부 문제 발생!", e);
+		}
+		finally
+		{
+			em.close();
+		}
 		
 		// 애플리케이션 종료시 엔티티 매니저 팩토리 종료
 		emf.close();

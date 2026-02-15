@@ -5,10 +5,14 @@ import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,16 +25,22 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
-public class Member {
+public class Member extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "member_id")
 	private Long id;
 	
-	@Column(name = "member_name")
+	@Column(name = "member_name", nullable = false)
 	@Setter
 	private String name;
+	
+	@Enumerated(EnumType.STRING)
+	private Role role;
+	
+	@Transient // JPA 에게 이 필드로 column 을 만들지 말라고 알려줌
+	private String dontMakeColumn;
 	
 	// @Embedded // 값 타입
 	// private Address address;

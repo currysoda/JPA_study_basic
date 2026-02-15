@@ -5,6 +5,9 @@ import hellojpa.entity.Member;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
+/**
+ * JPA 를 이용한 데이터 기본 CRUD
+ */
 @Log4j2
 public class DataCRUD {
 	
@@ -26,10 +29,11 @@ public class DataCRUD {
 		// JPA 는 트랜잭션 안에서 실행되어야 한다.
 		EntityTransaction tx = em.getTransaction();
 		
-		tx.begin();
 		
 		try
 		{
+			tx.begin();
+			
 			// 필요한 데이터 넣기
 			for (int i = 0; i < 10; i++)
 			{
@@ -68,6 +72,7 @@ public class DataCRUD {
 		
 		try
 		{
+			tx.begin();
 			
 			Member result = em.find(Member.class, 2L);
 			
@@ -102,8 +107,10 @@ public class DataCRUD {
 	public static void updateData(EntityManager em) {
 		EntityTransaction tx = em.getTransaction();
 		
+		
 		try
 		{
+			tx.begin();
 			
 			Member result = em.find(Member.class, 2L);
 			
@@ -142,6 +149,8 @@ public class DataCRUD {
 		
 		try
 		{
+			tx.begin();
+			
 			Member target = em.find(Member.class, 3L);
 			
 			System.out.println("result.getClass() = " + target.getClass());
@@ -159,7 +168,7 @@ public class DataCRUD {
 		catch (Exception e)
 		{
 			// Log4j2 Logger를 사용하여 ERROR 레벨로 빨간색 출력
-			log.error("데이터 수정 중 예외 발생!", e);
+			log.error("데이터 삭제 중 예외 발생!", e);
 			
 			// 트랜잭션에서 수행된 작업을 모두 취소하고 트랜잭션 실행 이전의 상태로 되돌린다.
 			tx.rollback();
