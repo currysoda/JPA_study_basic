@@ -5,12 +5,8 @@
 
 	<persistence-unit name="hello">
 
-		<!--		자동 스캔 정상작동 안함 Spring 과 같이쓰면 해결되니 일단 수동 등록-->
+		<!--		Spring 이 없으면 entity 자동 스캔이 제대로 작동하지 않는다. -->
 		<!--		<exclude-unlisted-classes>false</exclude-unlisted-classes>-->
-
-		<!--		수동 등록 @Entity 붙은 클래스 하나하나 직접 입력해야함-->
-		<!--		<class>hellojpa.entity.Member</class>-->
-		<!--		<class>hellojpa.entity.Team</class>-->
 
 		<properties>
 			<property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
@@ -23,6 +19,7 @@
 
 			<!-- Hibernate 6.x에서 엔티티 자동 감지 설정 -->
 			<!-- class: @Entity 어노테이션이 있는 클래스 자동 스캔 -->
+			<!--			정상 작동하지 않을 수 있다고 했고 실제로 작동 안함 -->
 			<!--			<property name="hibernate.archive.autodetection" value="class"/>-->
 
 			<!-- sql 표시 밑 보기 편하게 칠하기 -->

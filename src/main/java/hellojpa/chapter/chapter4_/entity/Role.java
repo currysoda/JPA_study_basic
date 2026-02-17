@@ -1,4 +1,4 @@
-package hellojpa.entity;
+package hellojpa.chapter.chapter4_.entity;
 
 import lombok.Getter;
 

@@ -1,29 +1,33 @@
-package hellojpa.jpamethod;
+package hellojpa.chapter.chapter4_;
 
-import lombok.extern.log4j.Log4j2;
-import hellojpa.entity.Member;
+import hellojpa.chapter.chapter4_.entity.MemberV2;
+import hellojpa.chapter.chapter4_.entity.Role;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * JPA 를 이용한 데이터 기본 CRUD
+ * chapter 4 이후 사용하는 CRUD
  */
 @Log4j2
-public class DataCRUD {
+public class DataCRUD_V2 {
 	
 	// JPA 를 이용한 데이터 삽입
 	public static void InsertData(EntityManager em) throws Exception {
 		
 		// 넣을 엔티티 배열에 선언
-		Member[] arrMember = new Member[10];
+		MemberV2[] arrMember = new MemberV2[10];
 		
 		for (int i = 0; i < 10; i++)
 		{
 			String str = "hello";
 			
-			arrMember[i] = Member.builder()
-			                     .name(str + (i + 1))
-			                     .build();
+			MemberV2.builder()
+			        .name(str)
+			        .role(Role.MEMBER)
+			        .dontMakeColumn("special field")
+			        .build();
 		}
 		
 		// JPA 는 트랜잭션 안에서 실행되어야 한다.
@@ -74,7 +78,7 @@ public class DataCRUD {
 		{
 			tx.begin();
 			
-			Member result = em.find(Member.class, 2L);
+			MemberV2 result = em.find(MemberV2.class, 2L);
 			
 			System.out.println("result.getClass() = " + result.getClass());
 			System.out.println("result.getId() = " + result.getId());
@@ -112,7 +116,7 @@ public class DataCRUD {
 		{
 			tx.begin();
 			
-			Member result = em.find(Member.class, 2L);
+			MemberV2 result = em.find(MemberV2.class, 2L);
 			
 			result.setName("newName1111");
 			
@@ -151,7 +155,7 @@ public class DataCRUD {
 		{
 			tx.begin();
 			
-			Member target = em.find(Member.class, 3L);
+			MemberV2 target = em.find(MemberV2.class, 3L);
 			
 			System.out.println("result.getClass() = " + target.getClass());
 			System.out.println("result.getId() = " + target.getId());

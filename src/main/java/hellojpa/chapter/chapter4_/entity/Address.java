@@ -1,15 +1,13 @@
-package hellojpa.entity;
+package hellojpa.chapter.chapter4_.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Entity;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 
 // 엔티티가 아니다 -> 테이블이 안 만들어 진다.
 // 값 타입의 필드는 펼쳐져서 필드 하나하나가 @Embedded 한 엔티티가 만드는 테이블의 컬럼이 된다.
@@ -20,7 +18,7 @@ import lombok.Value;
 @AllArgsConstructor // 생성자를 통해 값을 넣어야 하므로 필요합니다, 빌더랑 같이 사용
 @EqualsAndHashCode  // 값 타입은 필드값이 같으면 같은 객체로 보기 위해 필수입니다
 public class Address {
-
+	
 	@Column(name = "zipcode")
 	private int zipcode;
 	

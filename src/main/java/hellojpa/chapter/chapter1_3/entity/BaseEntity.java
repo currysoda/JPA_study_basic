@@ -1,7 +1,8 @@
-package hellojpa.entity;
+package hellojpa.chapter.chapter1_3.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.PrePersist;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
@@ -19,4 +20,13 @@ public abstract class BaseEntity { // 추상 클래스로 만들어 상속 받�
 	
 	@Column(name = "is_deleted") // soft-delete 구현 시 사용
 	private Boolean isDeleted;
+	
+	@PrePersist
+	public void prePersist() {
+		LocalDateTime now = LocalDateTime.now();
+		this.updatedAt = now;
+		this.createdAt = now;
+		isDeleted = false;
+		deletedAt = null;
+	}
 }

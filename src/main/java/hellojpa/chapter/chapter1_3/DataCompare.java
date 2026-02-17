@@ -1,6 +1,6 @@
-package hellojpa.jpamethod;
+package hellojpa.chapter.chapter1_3;
 
-import hellojpa.entity.Member;
+import hellojpa.chapter.chapter1_3.entity.Member;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import lombok.extern.log4j.Log4j2;
