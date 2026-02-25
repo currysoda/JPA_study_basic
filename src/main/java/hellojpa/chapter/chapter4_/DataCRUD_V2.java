@@ -14,6 +14,7 @@ import lombok.extern.log4j.Log4j2;
 public class DataCRUD_V2 {
 	
 	// JPA 를 이용한 데이터 삽입
+	// 연관관계 설명을 위한 데이터 삽입
 	public static void InsertData(EntityManager em) throws Exception {
 		
 		// 넣을 엔티티 배열에 선언
@@ -21,18 +22,19 @@ public class DataCRUD_V2 {
 		
 		for (int i = 0; i < 10; i++)
 		{
-			String str = "hello";
+			String str = "MemberV2";
 			
 			MemberV2.builder()
 			        .name(str)
 			        .role(Role.MEMBER)
 			        .dontMakeColumn("special field")
+			        .CLOB("test CLOB string")
+			        .BLOB(10000L)
 			        .build();
 		}
 		
 		// JPA 는 트랜잭션 안에서 실행되어야 한다.
 		EntityTransaction tx = em.getTransaction();
-		
 		
 		try
 		{

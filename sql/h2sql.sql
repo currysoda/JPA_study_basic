@@ -5,7 +5,13 @@ show tables;
 
 -- 멤버 테이블의 모든 항목 출력
 select *
-	from member
-	limit 100;
+from member
+limit 100;
+
+select *
+from team
+limit 100;
+
+
 
 

@@ -14,7 +14,7 @@ public class Chapter4_ {
 		
 		try
 		{
-			DataCRUD.InsertData(em);
+			// DataCRUD_V2.InsertData(em);
 		}
 		
 		catch (Exception e)
