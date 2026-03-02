@@ -3,6 +3,7 @@ package hellojpa.chapter.chapter4_.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
@@ -28,5 +29,11 @@ public abstract class BaseEntity { // 추상 클래스로 만들어 상속 받�
 		this.createdAt = now;
 		isDeleted = false;
 		deletedAt = null;
+	}
+	
+	@PreUpdate
+	public void preUpdate() {
+		LocalDateTime now = LocalDateTime.now();
+		this.updatedAt = now;
 	}
 }

@@ -33,7 +33,8 @@ public class Team extends BaseEntity {
 	@Setter
 	private String name;
 	
-	// mappedby 는 변수명
+	// mappedby 는 반대편의 변수명을 작성한다
+	// mappedby 가 있는 필드는 DB column 이 생성되지 않는다. => 자바 프로그래밍에서 필요해서 쓴다는 뜻
 	@OneToMany(mappedBy = "mappedbyIsVariableName", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private final List<MemberV2> memberV2List = new ArrayList<>();
 	

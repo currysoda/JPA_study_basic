@@ -57,11 +57,12 @@ public class MemberV2 extends BaseEntity {
 	// 다대일 매핑
 	// 연관관계의 주인
 	// JoinColumn 의 name 에는 DB 에서 실제로 사용되는 column name 을 넣어준다.
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "team_id", // JOIN 할 DB column name 을 알려준다.
 	            // 제약사항에 정보 넣어주기 기본 JPA 가 넣는 이름은 알아보기 힘들다.
 	            foreignKey = @ForeignKey(name = "FK_MEMBER_TEAM",
-	                                     foreignKeyDefinition = "FOREIGN KEY (team_id) REFERENCES team(team_id) ON DELETE CASCADE"))
+	                                     foreignKeyDefinition = "FOREIGN KEY (team_id) REFERENCES team(team_id) ON DELETE CASCADE"),
+	            nullable = true)
 	private Team mappedbyIsVariableName;
 	
 	// 일대일 매핑
@@ -87,14 +88,39 @@ public class MemberV2 extends BaseEntity {
 		this.dontMakeColumn = dontMakeColumn;
 		this.CLOB = (CLOB != null) ? CLOB : "default String";
 		this.BLOB = (BLOB != null) ? BLOB : 0L;
+		this.mappedbyIsVariableName = null;
 	}
 	
 	// 클래스 내부 편의 메소드 (연관관계가 항상 같이 변하도록 준비)
-	public void addTeam(Team team) {
-	
+	public void joinTeam(Team team) {
+		
+		// 가입 가능 상태 조회
+		if (this.mappedbyIsVariableName != null)
+		{
+			throw new IllegalStateException("이미 팀에 소속된 회원입니다. 기존 팀을 먼저 탈퇴하세요.");
+		}
+		
+		// 팀 클래스에 내 정보 저장
+		team.getMemberV2List().add(this);
+		
+		// 내 클래스 필드에 팀 정보 저장
+		this.mappedbyIsVariableName = team;
 	}
 	
-	public void removeTeam(Team team) {
-	
+	public void leaveTeam() {
+		
+		// 탈퇴 가능 상태 조회
+		if (this.mappedbyIsVariableName == null)
+		{
+			throw new IllegalStateException("기존에 존재하는 팀이 없습니다.");
+		}
+		
+		Team temp = this.mappedbyIsVariableName;
+		
+		// 내 클래스 필드에 팀 정보 초기화
+		this.mappedbyIsVariableName = null;
+		
+		// 팀 클래스에 내 정보 제거
+		temp.getMemberV2List().remove(this);
 	}
 }

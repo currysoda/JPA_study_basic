@@ -14,9 +14,10 @@ public class Chapter4_ {
 		
 		try
 		{
-			// DataCRUD_V2.InsertData(em);
+			DataCRUD_V2.InsertData(em);
+			DataCRUD_V2.memberTeamMapping(em);
+			DataCRUD_V2.getProxyInstance(em);
 		}
-		
 		catch (Exception e)
 		{
 			// Log4j2 Logger를 사용하여 ERROR 레벨로 빨간색 출력
@@ -26,7 +27,5 @@ public class Chapter4_ {
 		{
 			em.close();
 		}
-		
 	}
-	
 }

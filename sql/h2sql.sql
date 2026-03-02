@@ -12,6 +12,14 @@ select *
 from team
 limit 100;
 
+select *
+from locker
+limit 100;
+
+
+
+
+
 
 
 

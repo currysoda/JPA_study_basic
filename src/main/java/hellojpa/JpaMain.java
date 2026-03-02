@@ -2,6 +2,7 @@ package hellojpa;
 
 import eu.infomas.annotation.AnnotationDetector;
 import hellojpa.chapter.chapter1_3.Chapter1_3;
+import hellojpa.chapter.chapter4_.Chapter4_;
 import jakarta.persistence.*;
 import java.io.PrintStream;
 import java.lang.annotation.Annotation;
@@ -49,7 +50,9 @@ public class JpaMain {
 			}
 		});
 		
-		detector.detect("hellojpa");
+		// 패키지 경로 넣어야 함
+		// @Entity(name = "Member") 가 겹치는 문제 때문에 챕터당 설정 변경 필요
+		detector.detect("hellojpa.chapter.chapter4_");
 		
 		Map<String, Object> props = new HashMap<>();
 		props.put(AvailableSettings.LOADED_CLASSES, entities);
@@ -57,8 +60,11 @@ public class JpaMain {
 		// 엔티티 매니저 팩토리 생성
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("hello", props);
 		
-		// 1 ~ 4 장 내용
-		Chapter1_3.start(emf);
+		// 1 ~ 3 장 내용
+		// Chapter1_3.start(emf);
+		
+		// 4 ~ 장 내용
+		Chapter4_.start(emf);
 		
 		// 애플리케이션 종료시 엔티티 매니저 팩토리 종료
 		emf.close();
