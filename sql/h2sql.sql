@@ -16,7 +16,9 @@ select *
 from locker
 limit 100;
 
-
+select *
+from member_favorite_fruit
+limit 100;
 
 
 

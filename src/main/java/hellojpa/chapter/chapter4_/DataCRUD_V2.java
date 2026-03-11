@@ -1,11 +1,15 @@
 package hellojpa.chapter.chapter4_;
 
+import hellojpa.chapter.chapter4_.entity.Address;
+import hellojpa.chapter.chapter4_.entity.Fruit;
 import hellojpa.chapter.chapter4_.entity.Locker;
 import hellojpa.chapter.chapter4_.entity.MemberV2;
 import hellojpa.chapter.chapter4_.entity.Role;
 import hellojpa.chapter.chapter4_.entity.Team;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -24,6 +28,28 @@ public class DataCRUD_V2 {
 		Team[]     arrTeam   = new Team[3];
 		Locker[]   arrlocker = new Locker[10];
 		
+		Address address1 = Address.builder()
+		                          .locationName("home-address")
+		                          .zipcode(12345)
+		                          .build();
+		
+		Address address2 = Address.builder()
+		                          .locationName("corporation-address")
+		                          .zipcode(12345)
+		                          .build();
+		
+		Fruit fruit1 = Fruit.builder()
+		                    .name("apple")
+		                    .build();
+		
+		Fruit fruit2 = Fruit.builder()
+		                    .name("banana")
+		                    .build();
+		
+		Fruit fruit3 = Fruit.builder()
+		                    .name("orange")
+		                    .build();
+		
 		for (int i = 0; i < 10; i++)
 		{
 			String str       = "MemberV2";
@@ -40,6 +66,14 @@ public class DataCRUD_V2 {
 			Locker locker = Locker.builder()
 			                      .name(strLocker + (i + 1))
 			                      .build();
+			
+			// fruit 더하기
+			memberV2.addFruit(fruit1);
+			memberV2.addFruit(fruit2);
+			memberV2.addFruit(fruit3);
+			
+			// fruit 빼기
+			// memberV2.removeFruit(fruit3);
 			
 			arrMember[i] = memberV2;
 			arrlocker[i] = locker;
@@ -127,7 +161,7 @@ public class DataCRUD_V2 {
 			m4.leaveTeam();
 			
 			// member 의 team 필드를 이용해서 team name 조회
-			System.out.println("m1.getTeam().getName() = " + m1.getMappedbyIsVariableName().getName());
+			System.out.println("m1.getTeam().getName() = " + m1.getTeam().getName());
 			
 			tx.commit();
 		}
@@ -199,6 +233,8 @@ public class DataCRUD_V2 {
 			// 파라미터로 전달받은 em 은 메소드 밖에서 해제
 		}
 	}
+	
+	// 값
 	
 	// JPA 를 이용한 데이터 조회
 	// 조회또한 트랜잭션 안에서 실행되는 것이 좋다.

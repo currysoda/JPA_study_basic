@@ -1,7 +1,11 @@
 package hellojpa.chapter.chapter4_.entity;
 
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ConstraintMode;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -16,6 +20,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -63,7 +69,7 @@ public class MemberV2 extends BaseEntity {
 	            foreignKey = @ForeignKey(name = "FK_MEMBER_TEAM",
 	                                     foreignKeyDefinition = "FOREIGN KEY (team_id) REFERENCES team(team_id) ON DELETE CASCADE"),
 	            nullable = true)
-	private Team mappedbyIsVariableName;
+	private Team team;
 	
 	// 일대일 매핑
 	@OneToOne(fetch = FetchType.LAZY)
@@ -80,22 +86,44 @@ public class MemberV2 extends BaseEntity {
 	// }) // 값 타입을 새로 매핑
 	// private Address workAddress;
 	
+	// 임베디드 타입(값 타입)
+	@Embedded
+	private Address address;
+	
+	// 값 타입 재정의
+	@Embedded
+	@AttributeOverrides({
+		@AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode")),
+		@AttributeOverride(name = "locationName", column = @Column(name = "work_location_name"))
+	})
+	private Address workAddress;
+	
+	// 값 타입의 컬렉션
+	@ElementCollection
+	@CollectionTable(
+		name = "MEMBER_FAVORITE_FRUIT",
+		joinColumns = @JoinColumn(name = "member_id")
+	)
+	private List<Fruit> fruitList = new ArrayList<>();
+	
 	// id 는 자동 생성 전략
 	@Builder
-	public MemberV2(String name, Role role, String dontMakeColumn, String CLOB, Long BLOB) {
+	public MemberV2(String name, Role role, String dontMakeColumn, String CLOB, Long BLOB, Address address, Address workAddress) {
 		this.name = name;
 		this.role = role;
 		this.dontMakeColumn = dontMakeColumn;
 		this.CLOB = (CLOB != null) ? CLOB : "default String";
 		this.BLOB = (BLOB != null) ? BLOB : 0L;
-		this.mappedbyIsVariableName = null;
+		this.team = null;
+		this.address = address;
+		this.workAddress = workAddress;
 	}
 	
 	// 클래스 내부 편의 메소드 (연관관계가 항상 같이 변하도록 준비)
 	public void joinTeam(Team team) {
 		
 		// 가입 가능 상태 조회
-		if (this.mappedbyIsVariableName != null)
+		if (this.team != null)
 		{
 			throw new IllegalStateException("이미 팀에 소속된 회원입니다. 기존 팀을 먼저 탈퇴하세요.");
 		}
@@ -104,23 +132,39 @@ public class MemberV2 extends BaseEntity {
 		team.getMemberV2List().add(this);
 		
 		// 내 클래스 필드에 팀 정보 저장
-		this.mappedbyIsVariableName = team;
+		this.team = team;
 	}
 	
 	public void leaveTeam() {
 		
 		// 탈퇴 가능 상태 조회
-		if (this.mappedbyIsVariableName == null)
+		if (this.team == null)
 		{
 			throw new IllegalStateException("기존에 존재하는 팀이 없습니다.");
 		}
 		
-		Team temp = this.mappedbyIsVariableName;
+		Team temp = this.team;
 		
 		// 내 클래스 필드에 팀 정보 초기화
-		this.mappedbyIsVariableName = null;
+		this.team = null;
 		
 		// 팀 클래스에 내 정보 제거
 		temp.getMemberV2List().remove(this);
+	}
+	
+	// 값 타입 컬렉션 편의 메소드
+	public void addFruit(Fruit fruit) {
+		fruitList.add(fruit);
+	}
+	
+	public void removeFruit(Fruit fruit) throws Exception {
+		if (!fruitList.isEmpty())
+		{
+			fruitList.remove(fruit);
+		}
+		else
+		{
+			throw new Exception("빈 리스트 입니다.");
+		}
 	}
 }
