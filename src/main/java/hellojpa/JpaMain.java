@@ -1,8 +1,8 @@
 package hellojpa;
 
 import eu.infomas.annotation.AnnotationDetector;
-import hellojpa.chapter.chapter1_3.Chapter1_3;
-import hellojpa.chapter.chapter4_.Chapter4_;
+import hellojpa.chapter.chapter4_10.Chapter10;
+import hellojpa.chapter.chapter4_10.Chapter4_9;
 import jakarta.persistence.*;
 import java.io.PrintStream;
 import java.lang.annotation.Annotation;
@@ -52,7 +52,7 @@ public class JpaMain {
 		
 		// 패키지 경로 넣어야 함
 		// @Entity(name = "Member") 가 겹치는 문제 때문에 챕터당 설정 변경 필요
-		detector.detect("hellojpa.chapter.chapter4_");
+		detector.detect("hellojpa.chapter.chapter4_10");
 		
 		Map<String, Object> props = new HashMap<>();
 		props.put(AvailableSettings.LOADED_CLASSES, entities);
@@ -64,7 +64,15 @@ public class JpaMain {
 		// Chapter1_3.start(emf);
 		
 		// 4 ~ 장 내용
-		Chapter4_.start(emf);
+		Chapter4_9.start(emf);
+		
+		System.out.println(System.lineSeparator());
+		System.out.println(System.lineSeparator());
+		System.out.println(System.lineSeparator());
+		
+		// 10 장 내용 JPQL
+		System.out.println("Chapter10 시작");
+		Chapter10.jpqlStart(emf);
 		
 		// 애플리케이션 종료시 엔티티 매니저 팩토리 종료
 		emf.close();
