@@ -1,5 +1,12 @@
 package hellojpa.chapter.chapter4_10.dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class MemberStatsDTO {
 	
 	private Long   count;
@@ -13,46 +20,6 @@ public class MemberStatsDTO {
 		this.sumAge = sumAge;
 		this.avgAge = avgAge;
 		this.maxAge = maxAge;
-		this.minAge = minAge;
-	}
-	
-	public Long getCount() {
-		return count;
-	}
-	
-	public void setCount(Long count) {
-		this.count = count;
-	}
-	
-	public Long getSumAge() {
-		return sumAge;
-	}
-	
-	public void setSumAge(Long sumAge) {
-		this.sumAge = sumAge;
-	}
-	
-	public Double getAvgAge() {
-		return avgAge;
-	}
-	
-	public void setAvgAge(Double avgAge) {
-		this.avgAge = avgAge;
-	}
-	
-	public Long getMaxAge() {
-		return maxAge;
-	}
-	
-	public void setMaxAge(Long maxAge) {
-		this.maxAge = maxAge;
-	}
-	
-	public Long getMinAge() {
-		return minAge;
-	}
-	
-	public void setMinAge(Long minAge) {
 		this.minAge = minAge;
 	}
 }

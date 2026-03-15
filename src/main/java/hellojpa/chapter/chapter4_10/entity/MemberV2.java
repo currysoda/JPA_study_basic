@@ -65,7 +65,7 @@ public class MemberV2 extends BaseEntity {
 	
 	// DB BLob 타입에 매핑 바이트 타입으로 저장
 	@Lob
-	private Long BLOB;
+	private Long BLOB = 0L;
 	
 	// 다대일 매핑
 	// 연관관계의 주인
@@ -83,26 +83,19 @@ public class MemberV2 extends BaseEntity {
 	@JoinColumn(name = "locker_id", unique = true) // 1:1 매핑을 위해 unique 조건이 DB 에도 반영됨
 	private Locker locker;
 	
-	// @Embedded // 값 타입
-	// private Address address;
-	//
-	// @Embedded // 값 타입 구조인데 column_name 을 다르게 해야하는 경우
-	// @AttributeOverrides({
-	// 	@AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode")),
-	// 	@AttributeOverride(name = "locationName", column = @Column(name = "work_locationName"))
-	// }) // 값 타입을 새로 매핑
-	// private Address workAddress;
-	
 	// 임베디드 타입(값 타입)
 	@Embedded
+	@Setter
 	private Address address;
 	
 	// 값 타입 재정의
+	// 값 타입 구조인데 column_name 을 다르게 해야하는 경우 @AttributeOverrides, @AttributeOverride 이용
 	@Embedded
 	@AttributeOverrides({
 		@AttributeOverride(name = "zipcode", column = @Column(name = "work_zipcode")),
 		@AttributeOverride(name = "locationName", column = @Column(name = "work_location_name"))
 	})
+	// 값 타입을 새로 매핑
 	private Address workAddress;
 	
 	// 값 타입의 컬렉션

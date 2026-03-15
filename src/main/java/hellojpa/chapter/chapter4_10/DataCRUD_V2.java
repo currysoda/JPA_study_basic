@@ -8,6 +8,8 @@ import hellojpa.chapter.chapter4_10.entity.Role;
 import hellojpa.chapter.chapter4_10.entity.Team;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import java.util.List;
+import java.util.Random;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -33,7 +35,7 @@ public class DataCRUD_V2 {
 		
 		Address address2 = Address.builder()
 		                          .locationName("corporation-address")
-		                          .zipcode(12345)
+		                          .zipcode(67890)
 		                          .build();
 		
 		Fruit fruit1 = Fruit.builder()
@@ -59,6 +61,7 @@ public class DataCRUD_V2 {
 			                            .dontMakeColumn("special field" + String.valueOf(i + 1))
 			                            .CLOB("test CLOB string" + String.valueOf(i + 1))
 			                            .BLOB(10000L)
+			                            .address(address1)
 			                            .build();
 			
 			Locker locker = Locker.builder()
@@ -75,6 +78,11 @@ public class DataCRUD_V2 {
 			
 			arrMember[i] = memberV2;
 			arrlocker[i] = locker;
+		}
+		
+		for (int i = 8; i < arrMember.length; i++)
+		{
+			arrMember[i].setAddress(address2);
 		}
 		
 		for (int i = 0; i < arrTeam.length; i++)
@@ -140,26 +148,25 @@ public class DataCRUD_V2 {
 		{
 			tx.begin();
 			
-			MemberV2 m1 = em.find(MemberV2.class, 1L);
-			MemberV2 m2 = em.find(MemberV2.class, 2L);
-			MemberV2 m3 = em.find(MemberV2.class, 3L);
-			MemberV2 m4 = em.find(MemberV2.class, 4L);
+			String jpql1 = "select m from Member m";
 			
-			Team t1 = em.find(Team.class, 1L);
-			Team t2 = em.find(Team.class, 2L);
-			Team t3 = em.find(Team.class, 3L);
+			List<MemberV2> list1 = em.createQuery(jpql1, MemberV2.class)
+			                         .getResultList();
 			
-			// team 에 들어가는 메소드
-			m1.joinTeam(t1);
-			m2.joinTeam(t2);
-			m3.joinTeam(t3);
-			m4.joinTeam(t3);
+			String jpql2 = "select t from Team t";
 			
-			// team 을 떠나는 메소드
-			m4.leaveTeam();
+			List<Team> list2 = em.createQuery(jpql2, Team.class)
+			                     .getResultList();
+			
+			for (MemberV2 m : list1)
+			{
+				m.joinTeam(list2.get(new Random().nextInt(0, list2.size())));
+			}
+			
+			list1.getLast().leaveTeam();
 			
 			// member 의 team 필드를 이용해서 team name 조회
-			System.out.println("m1.getTeam().getName() = " + m1.getTeam().getName());
+			System.out.println("m1.getTeam().getName() = " + list1.getFirst().getTeam().getName());
 			
 			tx.commit();
 		}

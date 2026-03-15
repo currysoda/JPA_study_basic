@@ -67,7 +67,7 @@ public class JpaMain {
 		Chapter4_9.start(emf);
 		
 		System.out.println(System.lineSeparator());
-		System.out.println(System.lineSeparator());
+		System.out.println("여기부터 10장");
 		System.out.println(System.lineSeparator());
 		
 		// 10 장 내용 JPQL
