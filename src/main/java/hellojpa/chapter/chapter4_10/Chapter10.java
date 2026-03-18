@@ -1,5 +1,6 @@
 package hellojpa.chapter.chapter4_10;
 
+import hellojpa.chapter.chapter4_10.dto.MemberAgeDTO;
 import hellojpa.chapter.chapter4_10.dto.MemberJoinTeamDTO;
 import hellojpa.chapter.chapter4_10.dto.MemberStatsDTO;
 import hellojpa.chapter.chapter4_10.dto.MemberDTO;
@@ -35,7 +36,8 @@ public class Chapter10 {
 		}
 		
 		// 집계 함수
-		String jpql2 = "select new hellojpa.chapter.chapter4_10.dto.MemberStatsDTO(count(m.age), sum(m.age), avg(m.age), max(m.age), min(m.age)) from Member m";
+		String jpql2 = "select new hellojpa.chapter.chapter4_10.dto.MemberStatsDTO(count(m.age), sum(m.age), avg(m.age), max(m.age), min(m.age)) "
+			+ "from Member m";
 		
 		MemberStatsDTO stats = em.createQuery(jpql2, MemberStatsDTO.class)
 		                         .getSingleResult();
@@ -159,6 +161,7 @@ public class Chapter10 {
 		List<MemberJoinTeamDTO> list8 = em.createQuery(jpql10, MemberJoinTeamDTO.class).getResultList();
 		
 		// 결과 출력
+		System.out.println("내부 조인");
 		String attribute = String.format("%-15s | %-15s | %-15s | %-15s | %-15s",
 		                                 "member_id",
 		                                 "member_name",
@@ -178,8 +181,142 @@ public class Chapter10 {
 		}
 		
 		// 외부 조인
+		String jpql11 = "select new hellojpa.chapter.chapter4_10.dto.MemberJoinTeamDTO(m.id, m.name, m.team.id, t.id, t.name) "
+			+ "from Member m left join m.team t";
 		
+		List<MemberJoinTeamDTO> list9 = em.createQuery(jpql11, MemberJoinTeamDTO.class).getResultList();
+		
+		// 결과 출력
+		System.out.println("외부 조인");
+		System.out.println(attribute);
+		for (MemberJoinTeamDTO m : list9)
+		{
+			String tuple = String.format("%-15d | %-15s | %-15d | %-15d | %-15s",
+			                             m.getMemberId(),
+			                             m.getMemberName(),
+			                             m.getMemberTeamId(),
+			                             m.getTeamId(),
+			                             m.getTeamName());
+			System.out.println(tuple);
+		}
 		
 		// 세타 조인
+		String jpql12 = "select new hellojpa.chapter.chapter4_10.dto.MemberJoinTeamDTO(m.id, m.name, m.team.id, t.id, t.name) "
+			+ "from Member m, Team t "
+			+ "where m.team.id = t.id ";
+		
+		List<MemberJoinTeamDTO> list10 = em.createQuery(jpql12, MemberJoinTeamDTO.class).getResultList();
+		
+		// 결과 출력
+		System.out.println("세타 조인");
+		System.out.println(attribute);
+		for (MemberJoinTeamDTO m : list10)
+		{
+			String tuple = String.format("%-15d | %-15s | %-15d | %-15d | %-15s",
+			                             m.getMemberId(),
+			                             m.getMemberName(),
+			                             m.getMemberTeamId(),
+			                             m.getTeamId(),
+			                             m.getTeamName());
+			System.out.println(tuple);
+		}
+		
+		// 조인 - on 절
+		String jpql13 = "select new hellojpa.chapter.chapter4_10.dto.MemberJoinTeamDTO(m.id, m.name, m.team.id, t.id, t.name) "
+			+ "from Member m join m.team t on m.id >= 5";
+		
+		List<MemberJoinTeamDTO> list11 = em.createQuery(jpql13, MemberJoinTeamDTO.class).getResultList();
+		
+		// 결과 출력
+		System.out.println("조인 on절");
+		System.out.println(attribute);
+		for (MemberJoinTeamDTO m : list11)
+		{
+			String tuple = String.format("%-15d | %-15s | %-15d | %-15d | %-15s",
+			                             m.getMemberId(),
+			                             m.getMemberName(),
+			                             m.getMemberTeamId(),
+			                             m.getTeamId(),
+			                             m.getTeamName());
+			System.out.println(tuple);
+		}
+		
+		// 서브 쿼리
+		String subQueryAvgAge = "select avg(m.age) from Member m";
+		String jpql14         = "select m from Member m where m.age > (" + subQueryAvgAge + ")";
+		
+		List<MemberV2> list12 = em.createQuery(jpql14, member).getResultList();
+		
+		System.out.println("서브 쿼리");
+		for (MemberV2 m : list12)
+		{
+			System.out.println("m.getName() = " + m.getName());
+		}
+		
+		// 조건문 - case
+		String jpql15 = "select new hellojpa.chapter.chapter4_10.dto.MemberAgeDTO(m.id, m.name, m.age, "
+			+ "case when m.age <= 10 then '어린이' when m.age >= 60 then '노인' else '일반인' end) "
+			+ "from Member m";
+		
+		List<MemberAgeDTO> list13 = em.createQuery(jpql15, MemberAgeDTO.class).getResultList();
+		
+		String attribute1 = String.format("%-15s | %-15s | %-15s | %-15s",
+		                                  "member_id",
+		                                  "member_name",
+		                                  "member_age",
+		                                  "case_result");
+		
+		System.out.println("조건문 - case");
+		System.out.println(attribute1);
+		for (MemberAgeDTO m : list13)
+		{
+			String tuple = String.format("%-15d | %-15s | %-15d | %-15s",
+			                             m.getId(),
+			                             m.getName(),
+			                             m.getAge(),
+			                             m.getAgeGroup());
+			System.out.println(tuple);
+		}
+		
+		// 조건문 - coalesce
+		String jpql16 = "select m.id, m.name, coalesce(m.team.id, 0L) "
+			+ "from Member m ";
+		
+		List<Object[]> list14 = em.createQuery(jpql16, Object[].class)
+		                          .getResultList();
+		
+		String attribute2 = String.format("%-15s | %-15s | %-15s",
+		                                  "member_id",
+		                                  "member_name",
+		                                  "team_id");
+		
+		System.out.println("조건문 - coalesce 결과(team_id = 0 이면 팀 없음)");
+		System.out.println(attribute2);
+		for (Object[] o : list14)
+		{
+			String tuple = String.format("%-15d | %-15s | %-15d",
+			                             o[0],
+			                             o[1],
+			                             o[2]);
+			System.out.println(tuple);
+		}
+		
+		// 조건문 - nullif
+		String jpql17 = "select m.id, m.name, nullif(m.team.id, 1L) "
+			+ "from Member m ";
+		
+		List<Object[]> list15 = em.createQuery(jpql17, Object[].class)
+		                          .getResultList();
+		
+		System.out.println("조건문 - nullif 결과(team_id = 1 이면 값을 null 로 바꿈)");
+		System.out.println(attribute2);
+		for (Object[] o : list15)
+		{
+			String tuple = String.format("%-15d | %-15s | %-15d",
+			                             o[0],
+			                             o[1],
+			                             o[2]);
+			System.out.println(tuple);
+		}
 	}
 }
