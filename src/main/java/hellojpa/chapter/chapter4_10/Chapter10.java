@@ -318,5 +318,25 @@ public class Chapter10 {
 			                             o[2]);
 			System.out.println(tuple);
 		}
+		
+		// jpql 기본 함수
+		String jpql18 = "select concat('a','b') "
+		+ "from Member m ";
+
+		List<String> list16 = em.createQuery(jpql18,String.class).getResultList();
+
+		System.out.println("jpql 기본 함수");
+		for(String s : list16) {
+			System.out.println(s);
+		}
+
+		// concat 이외에 substring, trim, lower, upper, length, locate, abs, sqrt, mod, size, index 등이 있음
+
+		// 사용자 정의 함수
+		String jpql19 = "select concat('a','b') "
+		+ "from Member m ";
+
+		List<String> list17 = em.createQuery(jpql19,String.class).getResultList();
+
 	}
 }
