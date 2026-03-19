@@ -61,6 +61,9 @@ from member m inner join team t on m.team_id = t.team_id;
 select m.member_id, m.member_name, m.team_id, t.team_id, t.team_name
 from member m left outer join team t on m.team_id = t.team_id;
 
+select t.team_id, t.team_name, m.member_id, m.member_name, m.team_id
+from team t left outer join member m on m.team_id = t.team_id;
+
 -- 전체 외부 조인
 -- H2 는 full join 을 지원하지 않음 -> union 연산 사용
 select m.member_id, m.member_name, m.team_id, t.team_id, t.team_name

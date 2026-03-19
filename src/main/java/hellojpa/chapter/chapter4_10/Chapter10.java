@@ -6,6 +6,7 @@ import hellojpa.chapter.chapter4_10.dto.MemberStatsDTO;
 import hellojpa.chapter.chapter4_10.dto.MemberDTO;
 import hellojpa.chapter.chapter4_10.entity.Address;
 import hellojpa.chapter.chapter4_10.entity.MemberV2;
+import hellojpa.chapter.chapter4_10.entity.Team;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import java.util.List;
@@ -321,22 +322,69 @@ public class Chapter10 {
 		
 		// jpql 기본 함수
 		String jpql18 = "select concat('a','b') "
-		+ "from Member m ";
-
-		List<String> list16 = em.createQuery(jpql18,String.class).getResultList();
-
+			+ "from Member m ";
+		
+		List<String> list16 = em.createQuery(jpql18, String.class).getResultList();
+		
 		System.out.println("jpql 기본 함수");
-		for(String s : list16) {
+		for (String s : list16)
+		{
 			System.out.println(s);
 		}
-
+		
 		// concat 이외에 substring, trim, lower, upper, length, locate, abs, sqrt, mod, size, index 등이 있음
-
-		// 사용자 정의 함수
-		String jpql19 = "select concat('a','b') "
-		+ "from Member m ";
-
-		List<String> list17 = em.createQuery(jpql19,String.class).getResultList();
-
+		
+		// 사용자 정의 함수 - group_concat (MyH2CustomFunction 에서 등록)
+		String jpql19 = "select group_concat(m.name) from Member m";
+		
+		List<String> list17 = em.createQuery(jpql19, String.class).getResultList();
+		
+		System.out.println("사용자 정의 함수 - group_concat");
+		for (String s : list17)
+		{
+			System.out.println(s);
+		}
+		
+		// 경로 표현식, 명시적 조인, 묵시적 조인
+		// 이건 굳이 코드 예제 필요 없을 듯
+		
+		// jpql fetch join
+		// fetch join 은 엔티티를 select 해야 함 → select new(DTO) 와 함께 사용 불가
+		// 목적: 연관된 엔티티(team)를 쿼리 한 번에 같이 로딩 (N+1 문제 해결)
+		String jpql20 = "select m from Member m left join fetch m.team t";
+		
+		List<MemberV2> list18 = em.createQuery(jpql20, member).getResultList();
+		
+		System.out.println("엔티티 fetch join 예제");
+		System.out.println(attribute);
+		
+		for (MemberV2 m : list18)
+		{
+			// m.getTeam() 호출 시 추가 쿼리 없이 이미 로딩된 team 반환
+			String tuple = String.format("%-15d | %-15s | %-15s | %-15s",
+			                             m.getId(),
+			                             m.getName(),
+			                             m.getTeam() != null ? m.getTeam().getId().toString() : "null",
+			                             m.getTeam() != null ? m.getTeam().getName() : "null");
+			System.out.println(tuple);
+		}
+		
+		// 컬렉션을 페치 조인으로 조회
+		String jpql21 = "select t from Team t left join fetch t.memberV2List";
+		
+		List<Team> list19 = em.createQuery(jpql21, Team.class).getResultList();
+		
+		System.out.println("컬렉션 fetch join 예제");
+		
+		for (Team t : list19)
+		{
+			System.out.println("SQL 이 매번 나가는지 확인");
+			System.out.println("t.getId() = " + t.getId());
+			System.out.println("t.getName() = " + t.getName());
+			for (MemberV2 m : t.getMemberV2List())
+			{
+				System.out.println("  m.getId() = " + m.getId() + ", m.getName() = " + m.getName());
+			}
+		}
 	}
 }
