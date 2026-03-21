@@ -9,6 +9,7 @@ import hellojpa.chapter.chapter4_10.entity.MemberV2;
 import hellojpa.chapter.chapter4_10.entity.Team;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
 
@@ -350,7 +351,7 @@ public class Chapter10 {
 		
 		// jpql fetch join
 		// fetch join 은 엔티티를 select 해야 함 → select new(DTO) 와 함께 사용 불가
-		// 목적: 연관된 엔티티(team)를 쿼리 한 번에 같이 로딩 (N+1 문제 해결)
+		// 목적: 연관된 엔티티(member-team)를 쿼리 한 번에 같이 로딩 (N+1 문제 해결)
 		String jpql20 = "select m from Member m left join fetch m.team t";
 		
 		List<MemberV2> list18 = em.createQuery(jpql20, member).getResultList();
@@ -360,6 +361,7 @@ public class Chapter10 {
 		
 		for (MemberV2 m : list18)
 		{
+			System.out.println("SQL 이 매번 나가는지 확인"); // left join fetch -> left join 으로 바꾸면 sql 이 매번 나감
 			// m.getTeam() 호출 시 추가 쿼리 없이 이미 로딩된 team 반환
 			String tuple = String.format("%-15d | %-15s | %-15s | %-15s",
 			                             m.getId(),
@@ -378,13 +380,89 @@ public class Chapter10 {
 		
 		for (Team t : list19)
 		{
-			System.out.println("SQL 이 매번 나가는지 확인");
+			System.out.println("SQL 이 매번 나가는지 확인"); // left join fetch -> left join 으로 바꾸면 sql 이 매번 나감
 			System.out.println("t.getId() = " + t.getId());
 			System.out.println("t.getName() = " + t.getName());
 			for (MemberV2 m : t.getMemberV2List())
 			{
 				System.out.println("  m.getId() = " + m.getId() + ", m.getName() = " + m.getName());
 			}
+		}
+		
+		// Named 쿼리
+		// 미리 쓸 jpql 선언하고 사용
+		List<MemberV2> list20 = em.createNamedQuery("Member.findByUsername", member)
+		                          .setParameter("name", "MemberV2-1")
+		                          .getResultList();
+		
+		System.out.println("Named 쿼리");
+		for (MemberV2 m : list20)
+		{
+			System.out.println("m.getId() = " + m.getId());
+			System.out.println("m.getName() = " + m.getName());
+		}
+		
+		// jpql 벌크 연산
+		EntityTransaction tx = em.getTransaction();
+		
+		String jpql22 = "update Member m set m.age = m.age + :ageMount";
+		
+		System.out.println("jpql 벌크 연산");
+		try
+		{
+			tx.begin();
+			List<MemberV2> list21 = em.createQuery(jpql9, MemberV2.class).getResultList();
+			
+			String attribute3 = String.format("%-15s | %-15s | %-15s",
+			                                  "member_id",
+			                                  "member_name",
+			                                  "member_age"
+			                                 );
+			System.out.println("age 변경 전");
+			System.out.println(attribute3);
+			
+			for (MemberV2 m : list21)
+			{
+				String tuple = String.format("%-15d | %-15s | %-15d",
+				                             m.getId(),
+				                             "member_name",
+				                             m.getAge()
+				                            );
+				System.out.println(tuple);
+			}
+			
+			int mount = em.createQuery(jpql22)
+			              .setParameter("ageMount", 10L)
+			              .executeUpdate();
+			
+			System.out.println("영향 받은 엔티티 수 : " + mount);
+			em.clear(); // 벌크 연산 후 1차 캐시 초기화 -> 이후 조회 시 DB에서 새로 가져옴
+
+			List<MemberV2> list22 = em.createQuery(jpql9, MemberV2.class).getResultList();
+			System.out.println("age 변경 후");
+			System.out.println(attribute3);
+			
+			for (MemberV2 m : list22)
+			{
+				String tuple = String.format("%-15d | %-15s | %-15d",
+				                             m.getId(),
+				                             "member_name",
+				                             m.getAge()
+				                            );
+				System.out.println(tuple);
+			}
+			
+			em.clear(); // 벌크 연산 이후 1차 영속성 컨텍스트 초기화 필요
+			tx.commit();
+		}
+		catch (Exception e)
+		{
+			log.error("트랜잭션 중 예외 발생", e);
+			tx.rollback();
+		}
+		finally
+		{
+			System.out.println("finally 실행");
 		}
 	}
 }
