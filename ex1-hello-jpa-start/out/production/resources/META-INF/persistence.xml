@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+
+	<persistence-unit name="hello">
+
+		<!--		Spring 이 없으면 entity 자동 스캔이 제대로 작동하지 않는다. -->
+		<!--		<exclude-unlisted-classes>false</exclude-unlisted-classes>-->
+
+		<properties>
+			<property name="jakarta.persistence.jdbc.driver" value="org.h2.Driver"/>
+			<property name="jakarta.persistence.jdbc.user" value="sa"/>
+			<property name="jakarta.persistence.jdbc.password" value=""/>
+			<property name="jakarta.persistence.jdbc.url" value="jdbc:h2:tcp://localhost/~/test"/>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+
+			<property name="hibernate.hbm2ddl.auto" value="create"/>
+
+			<!-- Hibernate 6.x에서 엔티티 자동 감지 설정 -->
+			<!-- class: @Entity 어노테이션이 있는 클래스 자동 스캔 -->
+			<!--			정상 작동하지 않을 수 있다고 했고 실제로 작동 안함 -->
+			<!--			<property name="hibernate.archive.autodetection" value="class"/>-->
+
+			<!-- sql 표시 밑 보기 편하게 칠하기 -->
+			<property name="hibernate.show_sql" value="true"/>
+			<property name="hibernate.format_sql" value="true"/>
+			<property name="hibernate.highlight_sql" value="true"/>
+			<property name="hibernate.use_sql_comments" value="true"/>
+		</properties>
+	</persistence-unit>
+
+</persistence>
