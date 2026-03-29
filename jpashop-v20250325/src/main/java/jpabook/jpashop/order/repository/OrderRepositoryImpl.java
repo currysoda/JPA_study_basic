@@ -1,4 +1,4 @@
-package jpabook.jpashop.repository;
+package jpabook.jpashop.order.repository;
 
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class OrderRepository {
+public class OrderRepositoryImpl {
 	
 	private final EntityManager em;
 	
@@ -29,7 +29,7 @@ public class OrderRepository {
 	}
 	
 	public List<Order> findAllByString(OrderSearch orderSearch) {
-		//language=JPAQL
+		// language=JPQL
 		String  jpql             = "select o From Order o join o.member m";
 		boolean isFirstCondition = true;
 		

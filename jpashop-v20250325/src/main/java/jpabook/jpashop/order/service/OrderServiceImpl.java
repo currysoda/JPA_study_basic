@@ -1,20 +1,19 @@
-package jpabook.jpashop.order;
+package jpabook.jpashop.order.service;
 
+import java.util.List;
 import jpabook.jpashop.delivery.Delivery;
 import jpabook.jpashop.delivery.DeliveryStatus;
 import jpabook.jpashop.item.Item;
+import jpabook.jpashop.item.ItemRepository;
+import jpabook.jpashop.member.repository.MemberRepository;
 import jpabook.jpashop.member.entity.Member;
 import jpabook.jpashop.order.entity.Order;
 import jpabook.jpashop.order.entity.OrderItem;
 import jpabook.jpashop.order.entity.OrderSearch;
-import jpabook.jpashop.item.ItemRepository;
-import jpabook.jpashop.member.repository.MemberRepository;
 import jpabook.jpashop.order.repository.OrderRepositoryImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)

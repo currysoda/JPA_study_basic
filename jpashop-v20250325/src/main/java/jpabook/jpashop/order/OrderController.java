@@ -1,12 +1,11 @@
-package jpabook.jpashop.controller;
+package jpabook.jpashop.order;
 
 import jpabook.jpashop.member.entity.Member;
 import jpabook.jpashop.order.entity.Order;
 import jpabook.jpashop.order.entity.OrderSearch;
 import jpabook.jpashop.item.Item;
-import jpabook.jpashop.service.ItemService;
-import jpabook.jpashop.service.MemberService;
-import jpabook.jpashop.order.OrderServiceImpl;
+import jpabook.jpashop.item.ItemService;
+import jpabook.jpashop.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

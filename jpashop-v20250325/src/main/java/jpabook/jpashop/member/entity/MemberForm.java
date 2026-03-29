@@ -1,4 +1,4 @@
-package jpabook.jpashop.controller;
+package jpabook.jpashop.member.entity;
 
 import lombok.Getter;
 import lombok.Setter;

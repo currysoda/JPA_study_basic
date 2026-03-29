@@ -8,7 +8,7 @@ import jpabook.jpashop.order.entity.OrderStatus;
 import jpabook.jpashop.item.Book;
 import jpabook.jpashop.item.Item;
 import jpabook.jpashop.exception.NotEnoughStockException;
-import jpabook.jpashop.repository.OrderRepository;
+import jpabook.jpashop.order.repository.OrderRepositoryImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,9 +28,9 @@ public class OrderServiceImplTest {
 	EntityManager em;
 	
 	@Autowired
-	OrderServiceImpl orderServiceImpl;
+	OrderServiceImpl    orderServiceImpl;
 	@Autowired
-	OrderRepository  orderRepository;
+	OrderRepositoryImpl orderRepository;
 	
 	@Test
 	public void 상품주문() throws Exception {
