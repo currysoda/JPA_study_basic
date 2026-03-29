@@ -12,6 +12,10 @@ logback.xml -> log4j 사용하고 application.yml 에 설정 통합
 
 persistence.xml 은 필수 -> spring 없이 JPA 만 사용하려면
 
+entity 자동 스캔 스프링 없이 하이버네이트만 사용시 제대로 작동 안함
+
+적용법 찾아내서 적용했지만 그닥 권장되는 방법 아님 그러나 보통 스프링 없이 쓸 일이 없으므로 괜찮을지도?
+
 ---
 
 jpashop-v20250325 - 실전! 스프링 부트와 JPA 활용1 - 웹 애플리케이션 개발

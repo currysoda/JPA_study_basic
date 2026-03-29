@@ -1,4 +1,4 @@
-package jpabook.jpashop.domain.item;
+package jpabook.jpashop.item;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,10 +8,11 @@ import jakarta.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("B")
-@Getter @Setter
+@Getter
+@Setter
 public class Book extends Item {
-
-    private String author;
-    private String isbn;
-
+	
+	private String author;
+	private String isbn;
+	
 }

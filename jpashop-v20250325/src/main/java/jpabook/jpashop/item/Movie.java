@@ -1,4 +1,4 @@
-package jpabook.jpashop.domain.item;
+package jpabook.jpashop.item;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,10 +8,11 @@ import jakarta.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("M")
-@Getter @Setter
+@Getter
+@Setter
 public class Movie extends Item {
-
-    private String director;
-    private String actor;
-
+	
+	private String director;
+	private String actor;
+	
 }
