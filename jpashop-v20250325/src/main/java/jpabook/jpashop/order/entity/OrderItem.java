@@ -1,19 +1,20 @@
 package jpabook.jpashop.order.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import jpabook.jpashop.item.Item;
+import jpabook.jpashop.item.entity.Item;
 import jakarta.persistence.*;
 
-@Entity
+@Entity(name = "OrderItem")
 @Table(name = "order_item")
 @Getter
 @Setter
 public class OrderItem {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "order_item_id")
 	private Long id;
 	
@@ -29,15 +30,18 @@ public class OrderItem {
 	private int count;      //주문 수량
 	
 	//==생성 메서드==//
-	public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
+	@Builder
+	public OrderItem(Item item, int orderPrice, int count) {
 		OrderItem orderItem = new OrderItem();
 		orderItem.setItem(item);
 		orderItem.setOrderPrice(orderPrice);
 		orderItem.setCount(count);
 		
 		item.removeStock(count);
-		return orderItem;
 	}
+	
+	// 연관관계 메소드
+	
 	
 	//==비즈니스 로직==//
 	

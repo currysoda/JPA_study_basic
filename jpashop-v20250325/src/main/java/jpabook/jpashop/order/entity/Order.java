@@ -1,9 +1,10 @@
 package jpabook.jpashop.order.entity;
 
+import jakarta.annotation.Nonnull;
 import java.util.UUID;
-import jpabook.jpashop.address.Address;
-import jpabook.jpashop.delivery.Delivery;
-import jpabook.jpashop.delivery.DeliveryStatus;
+import jpabook.jpashop.common.BaseEntitiy;
+import jpabook.jpashop.delivery.entity.Delivery;
+import jpabook.jpashop.delivery.entity.DeliveryStatus;
 import jpabook.jpashop.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -23,10 +24,10 @@ import java.util.List;
 @Entity(name = "Order")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Order {
+public class Order extends BaseEntitiy {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "order_id")
 	private Long orderId; // DB 용 id
 	
@@ -44,52 +45,45 @@ public class Order {
 	@JoinColumn(name = "delivery_id")
 	private Delivery delivery; //배송정보
 	
+	@Column(name = "order_date")
 	private LocalDateTime orderDate; //주문시간
 	
+	@Column(name = "order_status")
 	@Enumerated(EnumType.STRING)
 	private OrderStatus status; //주문상태 [ORDER, CANCEL]
 	
 	@Builder
-	public Order(String orderNumber, Member member) {
-		this.orderDate = LocalDateTime.now();
-		this.orderNumber = orderNumber;
+	public Order(@Nonnull Member member, Delivery delivery) {
 		this.member = member;
+		this.delivery = delivery;
 		this.status = OrderStatus.ORDER;
+		this.orderDate = LocalDateTime.now();
+		makeOrderNumber();
 	}
 	
 	// 학습용이니 uuid 사용
-	public void setOrderNumber() {
-		this.orderNumber = UUID.randomUUID().toString();
+	// 주문번호는 생성시 바로 할당되고 변경되면 안됨
+	private void makeOrderNumber() {
+		if (orderNumber == null)
+		{
+			this.orderNumber = UUID.randomUUID().toString();
+		}
+		else
+		{
+			System.out.println("이미 주문번호가 존재합니다.");
+		}
 	}
 	
 	//==연관관계 메서드==//
-	public void setMember(Member member) {
+	// 연관관계의 주인인 경우 or @OnetoOne
+	public void addMember(Member member) {
 		this.member = member;
 		member.getOrders().add(this);
-	}
-	
-	public void addOrderItem(OrderItem orderItem) {
-		orderItems.add(orderItem);
-		orderItem.setOrder(this);
 	}
 	
 	public void setDelivery(Delivery delivery) {
 		this.delivery = delivery;
 		delivery.setOrder(this);
-	}
-	
-	//==생성 메서드==//
-	public static Order createOrder(Member member, Delivery delivery, OrderItem... orderItems) {
-		Order order = new Order();
-		order.setMember(member);
-		order.setDelivery(delivery);
-		for (OrderItem orderItem : orderItems)
-		{
-			order.addOrderItem(orderItem);
-		}
-		order.setStatus(OrderStatus.ORDER);
-		order.setOrderDate(LocalDateTime.now());
-		return order;
 	}
 	
 	//==비즈니스 로직==//
@@ -103,7 +97,7 @@ public class Order {
 			throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
 		}
 		
-		this.setStatus(OrderStatus.CANCEL);
+		// this.setStatus(OrderStatus.CANCEL);
 		for (OrderItem orderItem : orderItems)
 		{
 			orderItem.cancel();

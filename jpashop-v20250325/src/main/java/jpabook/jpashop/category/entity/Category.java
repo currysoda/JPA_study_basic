@@ -1,17 +1,16 @@
-package jpabook.jpashop.category;
+package jpabook.jpashop.category.entity;
 
 import lombok.Getter;
-import lombok.Setter;
 
-import jpabook.jpashop.item.Item;
+import jpabook.jpashop.item.entity.Item;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "Category")
+@Table(name = "category")
 @Getter
-@Setter
 public class Category {
 	
 	@Id

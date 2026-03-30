@@ -16,8 +16,9 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class OrderRepositoryImpl {
+public class OrderRepositoryImpl implements OrderRepository {
 	
+	// @RequiredArgsConstructor 가 엔티티 매니저 자동 주입
 	private final EntityManager em;
 	
 	public void save(Order order) {

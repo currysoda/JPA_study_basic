@@ -2,6 +2,7 @@ package jpabook.jpashop.member.entity;
 
 import jakarta.persistence.*;
 import jpabook.jpashop.address.Address;
+import jpabook.jpashop.common.BaseEntitiy;
 import jpabook.jpashop.order.entity.Order;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "member")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Member {
+public class Member extends BaseEntitiy {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -37,8 +38,7 @@ public class Member {
 	private List<Order> orders = new ArrayList<>();
 	
 	@Builder
-	public Member(Long memberId, String memberName, Address address) {
-		this.memberId = memberId;
+	public Member(String memberName, Address address) {
 		this.memberName = memberName;
 		this.address = address;
 	}
