@@ -2,7 +2,7 @@ package jpabook.jpashop.service;
 
 import jpabook.jpashop.member.service.MemberServiceImpl;
 import jpabook.jpashop.member.entity.Member;
-import jpabook.jpashop.member.repository.MemberRepository;
+import jpabook.jpashop.member.repository.MemberRepositoryImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MemberServiceTest {
 	
 	@Autowired
-	MemberServiceImpl memberService;
+	MemberServiceImpl    memberService;
 	@Autowired
-	MemberRepository  memberRepository;
+	MemberRepositoryImpl memberRepositoryImpl;
 	
 	@Test
 	public void 회원가입() throws Exception {
@@ -30,7 +30,7 @@ public class MemberServiceTest {
 		Long saveId = memberService.join(member);
 		
 		//Then
-		assertEquals(member, memberRepository.findOneByMemberId(saveId));
+		assertEquals(member, memberRepositoryImpl.findOneByMemberId(saveId));
 	}
 	
 	@Test

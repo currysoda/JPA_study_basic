@@ -8,6 +8,7 @@ import jpabook.jpashop.item.entity.Book;
 import jpabook.jpashop.item.entity.Item;
 import jpabook.jpashop.exception.NotEnoughStockException;
 import jpabook.jpashop.order.repository.OrderRepositoryImpl;
+import jpabook.jpashop.order.service.OrderService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +28,7 @@ public class OrderServiceImplTest {
 	EntityManager em;
 	
 	@Autowired
-	OrderServiceImpl    orderServiceImpl;
+	OrderService        OrderService;
 	@Autowired
 	OrderRepositoryImpl orderRepository;
 	
@@ -40,7 +41,7 @@ public class OrderServiceImplTest {
 		int    orderCount = 2;
 		
 		//When
-		Long orderId = orderServiceImpl.order(member.getId(), item.getId(), orderCount);
+		// Long orderId = OrderService.order(member.getId(), item.getId(), orderCount);
 		
 		//Then
 		Order getOrder = orderRepository.findOne(orderId);

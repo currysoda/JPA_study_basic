@@ -1,14 +1,9 @@
 package jpabook.jpashop.order.service;
 
 import java.util.List;
-import jpabook.jpashop.delivery.entity.Delivery;
-import jpabook.jpashop.delivery.entity.DeliveryStatus;
-import jpabook.jpashop.item.entity.Item;
 import jpabook.jpashop.item.repository.ItemRepository;
-import jpabook.jpashop.member.repository.MemberRepository;
-import jpabook.jpashop.member.entity.Member;
+import jpabook.jpashop.member.repository.MemberRepositoryImpl;
 import jpabook.jpashop.order.entity.Order;
-import jpabook.jpashop.order.entity.OrderItem;
 import jpabook.jpashop.order.entity.OrderSearch;
 import jpabook.jpashop.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 	
-	private final MemberRepository memberRepository;
-	private final OrderRepository  orderRepository;
-	private final ItemRepository   itemRepository;
+	private final MemberRepositoryImpl memberRepositoryImpl;
+	private final OrderRepository      orderRepository;
+	private final ItemRepository       itemRepository;
 	
 	/**
 	 * 주문

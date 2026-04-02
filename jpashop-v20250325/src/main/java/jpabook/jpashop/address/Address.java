@@ -8,6 +8,7 @@ import lombok.Getter;
 
 import jakarta.persistence.Embeddable;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Embeddable
 @Getter
@@ -21,4 +22,9 @@ public class Address {
 	private String city;
 	private String street;
 	private String zipcode;
+	
+	@Override
+	public String toString() {
+		return "city : " + city + " street : " + street + " zipcode : " + zipcode + System.lineSeparator();
+	}
 }
