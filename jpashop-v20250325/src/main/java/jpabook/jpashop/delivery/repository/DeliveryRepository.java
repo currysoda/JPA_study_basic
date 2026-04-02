@@ -1,6 +1,11 @@
 package jpabook.jpashop.delivery.repository;
 
 
-public interface DeliveryRepository {
+import jpabook.jpashop.delivery.entity.Delivery;
 
+public interface DeliveryRepository {
+	
+	Delivery save(Delivery delivery);
+	
+	
 }

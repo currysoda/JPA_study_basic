@@ -11,6 +11,7 @@ import java.util.List;
 @RequiredArgsConstructor // lombok 을 이용한 주입
 public class MemberRepositoryImpl implements MemberRepository {
 	
+	// @PersistenceContext 이 어노테이션으로도 주입 가능
 	private final EntityManager em;
 	
 	public Member save(Member member) {
