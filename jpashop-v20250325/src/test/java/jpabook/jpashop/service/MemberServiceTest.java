@@ -1,6 +1,6 @@
 package jpabook.jpashop.service;
 
-import jpabook.jpashop.member.service.MemberService;
+import jpabook.jpashop.member.service.MemberServiceImpl;
 import jpabook.jpashop.member.entity.Member;
 import jpabook.jpashop.member.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MemberServiceTest {
 	
 	@Autowired
-	MemberService    memberService;
+	MemberServiceImpl memberService;
 	@Autowired
-	MemberRepository memberRepository;
+	MemberRepository  memberRepository;
 	
 	@Test
 	public void 회원가입() throws Exception {

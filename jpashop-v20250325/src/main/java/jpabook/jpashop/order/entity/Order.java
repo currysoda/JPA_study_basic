@@ -2,9 +2,8 @@ package jpabook.jpashop.order.entity;
 
 import jakarta.annotation.Nonnull;
 import java.util.UUID;
-import jpabook.jpashop.common.BaseEntitiy;
+import jpabook.jpashop.common.BaseEntity;
 import jpabook.jpashop.delivery.entity.Delivery;
-import jpabook.jpashop.delivery.entity.DeliveryStatus;
 import jpabook.jpashop.member.entity.Member;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -24,12 +23,12 @@ import java.util.List;
 @Entity(name = "Order")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Order extends BaseEntitiy {
+public class Order extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "order_id")
-	private Long orderId; // DB 용 id
+	private Long id; // DB 용 id
 	
 	@Column(name = "order_number")
 	private String orderNumber; // 고객이 볼 주문번호
@@ -53,9 +52,8 @@ public class Order extends BaseEntitiy {
 	private OrderStatus status; //주문상태 [ORDER, CANCEL]
 	
 	@Builder
-	public Order(@Nonnull Member member, Delivery delivery) {
+	public Order(@Nonnull Member member) {
 		this.member = member;
-		this.delivery = delivery;
 		this.status = OrderStatus.ORDER;
 		this.orderDate = LocalDateTime.now();
 		makeOrderNumber();
@@ -75,47 +73,24 @@ public class Order extends BaseEntitiy {
 	}
 	
 	//==연관관계 메서드==//
-	// 연관관계의 주인인 경우 or @OnetoOne
+	// Member-Order
 	public void addMember(Member member) {
 		this.member = member;
 		member.getOrders().add(this);
 	}
 	
+	// 근데 remove 할 일이 있을까? 잘 모르겠음
+	public void removeMember(Member member) {
+		member.getOrders().remove(this);
+		this.member = null;
+	}
+	
+	// order-delivery
 	public void setDelivery(Delivery delivery) {
-		this.delivery = delivery;
 		delivery.setOrder(this);
+		this.delivery = delivery;
 	}
 	
 	//==비즈니스 로직==//
-	
-	/**
-	 * 주문 취소
-	 */
-	public void cancel() {
-		if (delivery.getStatus() == DeliveryStatus.COMP)
-		{
-			throw new IllegalStateException("이미 배송완료된 상품은 취소가 불가능합니다.");
-		}
-		
-		// this.setStatus(OrderStatus.CANCEL);
-		for (OrderItem orderItem : orderItems)
-		{
-			orderItem.cancel();
-		}
-	}
-	
-	//==조회 로직==//
-	
-	/**
-	 * 전체 주문 가격 조회
-	 */
-	public int getTotalPrice() {
-		int totalPrice = 0;
-		for (OrderItem orderItem : orderItems)
-		{
-			totalPrice += orderItem.getTotalPrice();
-		}
-		return totalPrice;
-	}
-	
+	// 비즈니스 로직은 파일 분리
 }

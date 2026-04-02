@@ -7,7 +7,7 @@ import jakarta.persistence.PreUpdate;
 import java.time.LocalDateTime;
 
 @MappedSuperclass
-public abstract class BaseEntitiy {
+public abstract class BaseEntity {
 	
 	// LocalDateTime 사용 시 @Temporal 를 붙이지 않아도 알아서 해준다.(java8 이상)
 	@Column(name = "created_at", updatable = false) // 만든 날짜는 수정X
@@ -35,5 +35,10 @@ public abstract class BaseEntitiy {
 	public void preUpdate() {
 		LocalDateTime now = LocalDateTime.now();
 		this.updatedAt = now;
+	}
+	
+	public void softDelete() {
+		this.isDeleted = true;
+		this.deletedAt = LocalDateTime.now();
 	}
 }

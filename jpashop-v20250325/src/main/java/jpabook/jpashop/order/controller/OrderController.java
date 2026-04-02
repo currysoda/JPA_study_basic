@@ -5,7 +5,7 @@ import jpabook.jpashop.order.entity.Order;
 import jpabook.jpashop.order.entity.OrderSearch;
 import jpabook.jpashop.item.entity.Item;
 import jpabook.jpashop.item.service.ItemService;
-import jpabook.jpashop.member.service.MemberService;
+import jpabook.jpashop.member.service.MemberServiceImpl;
 import jpabook.jpashop.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -18,9 +18,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
 	
-	private final OrderService  orderService;
-	private final MemberService memberService;
-	private final ItemService   itemService;
+	private final OrderService      orderService;
+	private final MemberServiceImpl memberService;
+	private final ItemService       itemService;
 	
 	@GetMapping(value = "/order")
 	public String createForm(Model model) {
@@ -37,15 +37,15 @@ public class OrderController {
 	@PostMapping(value = "/order")
 	public String order(@RequestParam("memberId") Long memberId, @RequestParam("itemId") Long itemId, @RequestParam("count") int count) {
 		
-		orderService.order(memberId, itemId, count);
+		// orderService.order(memberId, itemId, count);
 		return "redirect:/orders";
 	}
 	
 	@GetMapping(value = "/orders")
 	public String orderList(@ModelAttribute("orderSearch") OrderSearch orderSearch, Model model) {
 		
-		List<Order> orders = orderService.findOrders(orderSearch);
-		model.addAttribute("orders", orders);
+		// List<Order> orders = orderService.findOrders(orderSearch);
+		// model.addAttribute("orders", orders);
 		
 		return "order/orderList";
 	}
@@ -53,7 +53,7 @@ public class OrderController {
 	@PostMapping(value = "/orders/{orderId}/cancel")
 	public String cancelOrder(@PathVariable("orderId") Long orderId) {
 		
-		orderService.cancelOrder(orderId);
+		// orderService.cancelOrder(orderId);
 		
 		return "redirect:/orders";
 	}

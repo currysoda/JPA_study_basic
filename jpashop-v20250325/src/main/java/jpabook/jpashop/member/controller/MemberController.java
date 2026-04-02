@@ -2,7 +2,7 @@ package jpabook.jpashop.member.controller;
 
 import jpabook.jpashop.address.Address;
 import jpabook.jpashop.member.entity.MemberForm;
-import jpabook.jpashop.member.service.MemberService;
+import jpabook.jpashop.member.service.MemberServiceImpl;
 import jpabook.jpashop.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
 	
-	private final MemberService memberService;
+	private final MemberServiceImpl memberService;
 	
 	@GetMapping(value = "/members/new")
 	public String createForm(Model model) {

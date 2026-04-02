@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @EqualsAndHashCode
+// Setter 열면 절때 안됨
 public class Address {
 	
 	private String city;
