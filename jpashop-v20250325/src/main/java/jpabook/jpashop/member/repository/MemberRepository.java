@@ -9,6 +9,8 @@ public interface MemberRepository {
 	
 	Member findOneByMemberId(Long id);
 	
+	Member findOneByMemberName(String name);
+	
 	List<Member> findAll();
 	
 	List<Member> findAllByName(String name);

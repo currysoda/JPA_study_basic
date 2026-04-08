@@ -1,7 +1,7 @@
 package jpabook.jpashop.member.service;
 
 import jpabook.jpashop.member.entity.Member;
-import jpabook.jpashop.member.repository.MemberRepositoryImpl;
+import jpabook.jpashop.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,35 +12,51 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 	
-	private final MemberRepositoryImpl memberRepositoryImpl;
+	private final MemberRepository memberRepository;
 	
 	/**
 	 * 회원가입
 	 */
+	@Override
 	@Transactional //변경
 	public Long join(Member member) {
 		
-		validateDuplicateMember(member); //중복 회원 검증
-		memberRepositoryImpl.save(member);
-		return member.getId();
-	}
-	
-	private void validateDuplicateMember(Member member) {
-		List<Member> findMembers = memberRepositoryImpl.findAllByName(member.getName());
-		if (!findMembers.isEmpty())
+		if (validateDuplicateMember(member))
 		{
 			throw new IllegalStateException("이미 존재하는 회원입니다.");
 		}
+		else
+		{
+			memberRepository.save(member);
+			return member.getId();
+		}
+	}
+	
+	// 중복 멤버 검증(이름으로)
+	private boolean validateDuplicateMember(Member member) {
+		
+		Member resultOne = memberRepository.findOneByMemberName(member.getName());
+		
+		return resultOne != null;
 	}
 	
 	/**
 	 * 전체 회원 조회
 	 */
+	@Override
 	public List<Member> findMembers() {
-		return memberRepositoryImpl.findAll();
+		return memberRepository.findAll();
 	}
 	
+	// 회원 한명 조회
+	@Override
 	public Member findOne(Long memberId) {
-		return memberRepositoryImpl.findOneByMemberId(memberId);
+		return memberRepository.findOneByMemberId(memberId);
+	}
+	
+	// 회원 이름으로 조회
+	@Override
+	public Member findOneByName(String name) {
+		return memberRepository.findOneByMemberName(name);
 	}
 }
