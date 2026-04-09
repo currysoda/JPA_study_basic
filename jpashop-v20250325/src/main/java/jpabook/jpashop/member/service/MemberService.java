@@ -13,4 +13,6 @@ public interface MemberService {
 	Member findOne(Long memberId);
 	
 	Member findOneByName(String name);
+	
+	void removeAll();
 }

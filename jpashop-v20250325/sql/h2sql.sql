@@ -8,8 +8,14 @@ from member
 limit 100;
 
 SHOW DATABASES;
+
 SHOW TABLES;
+
 SHOW CREATE TABLE 테이블명;
+
 DESCRIBE 테이블명;
+
 EXPLAIN SELECT * FROM 테이블명;
 
+delete
+from member;

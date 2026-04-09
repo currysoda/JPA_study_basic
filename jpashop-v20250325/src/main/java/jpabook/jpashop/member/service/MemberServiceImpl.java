@@ -59,4 +59,9 @@ public class MemberServiceImpl implements MemberService {
 	public Member findOneByName(String name) {
 		return memberRepository.findOneByMemberName(name);
 	}
+	
+	@Override
+	public void removeAll() {
+		memberRepository.removeAllMember();
+	}
 }

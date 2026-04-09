@@ -53,4 +53,9 @@ public class MemberRepositoryImpl implements MemberRepository {
 		         .setParameter("name", name)
 		         .getResultList();
 	}
+	
+	@Override
+	public void removeAllMember() {
+		em.createQuery("delete from Member m");
+	}
 }
