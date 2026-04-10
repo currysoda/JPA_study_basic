@@ -1,5 +1,8 @@
 package jpabook.jpashop.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
 import jpabook.jpashop.address.Address;
 import jpabook.jpashop.member.entity.Member;
 import jpabook.jpashop.member.repository.MemberRepository;
@@ -9,31 +12,36 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-@Slf4j
 @SpringBootTest
+@Slf4j
 @Transactional
-@Rollback(false) // DB에서 결과 직접 확인하고 싶을 때 주석 해제
-@RequiredArgsConstructor
+// @Rollback(false) // DB에서 결과 직접 확인하고 싶을 때 주석 해제
 @TestInstance(Lifecycle.PER_CLASS)
 @DisplayName("MemberService 전체 테스트")
+// @ExtendWith(MockitoExtension.class) // 가짜 객체 주입이 필요할 때 사용
 public class MemberServiceTest {
 	
-	private final MemberService    memberService;
-	private final MemberRepository memberRepository;
+	@Autowired
+	private MemberService    memberService;
+	@Autowired
+	private MemberRepository memberRepository;
 	
 	@BeforeAll
-	static void setUp() {
+	void setUp() {
 		
 		Address[] addressArr = new Address[10];
 		
@@ -48,95 +56,105 @@ public class MemberServiceTest {
 		
 		for (int i = 0; i < 10; i++)
 		{
-			Member.builder()
-			      .name("memberName-" + i)
-			      .address(addressArr[i])
-			      .build();
+			Member member = Member.builder()
+			                      .name("memberName-" + i)
+			                      .address(addressArr[i])
+			                      .build();
+			
+			memberService.join(member);
+		}
+		
+	}
+	
+	@Nested
+	@DisplayName("회원 가입")
+	class 회원_가입_절차 {
+		
+		@Test
+		@DisplayName("회원_등록")
+		@Rollback
+		public void 회원_등록() throws Exception {
+			
+			//Given
+			Member member = Member.builder()
+			                      .name("kim")
+			                      .address(new Address("서울", "강남대로", "12345"))
+			                      .build();
+			
+			//When
+			Long saveId = memberService.join(member);
+			
+			//Then
+			assertThat(memberRepository.findOneByMemberId(saveId)).isEqualTo(member);
+			log.info("저장된 회원 id={}, name={}", saveId, member.getName());
+		}
+		
+		@Test
+		@DisplayName("중복 회원 예외")
+		@Rollback
+		public void 중복_회원_예외() throws Exception {
+			//Given
+			Member member1 = Member.builder().name("kim").build();
+			Member member2 = Member.builder().name("kim").build();
+			
+			//When
+			memberService.join(member1);
+			
+			//Then
+			assertThatThrownBy(() -> memberService.join(member2))
+				.isInstanceOf(IllegalStateException.class);
 		}
 	}
 	
-	@Test
-	@DisplayName("회원 가입")
-	public void 회원가입() throws Exception {
-		//Given
-		Member member = Member.builder()
-		                      .name("kim")
-		                      .address(new Address("서울", "강남대로", "12345"))
-		                      .build();
+	@Nested
+	@DisplayName("회원_조회_테스트")
+	class 회원_조회 {
 		
-		//When
-		Long saveId = memberService.join(member);
+		@Test
+		@DisplayName("전체_회원_조회")
+		public void 전체_회원_조회() throws Exception {
+			//When
+			List<Member> members = memberService.findMembers();
+			
+			//Then
+			assertThat(members).hasSize(10);
+			log.info("전체 회원 수={}", members.size());
+		}
 		
-		//Then
-		assertEquals(member, memberRepository.findOneByMemberId(saveId));
-		log.info("저장된 회원 id={}, name={}", saveId, member.getName());
-	}
-	
-	@Test
-	@DisplayName("중복 회원 예외")
-	public void 중복_회원_예외() throws Exception {
-		//Given
-		Member member1 = Member.builder().name("kim").build();
-		Member member2 = Member.builder().name("kim").build();
+		@Test
+		@DisplayName("id로_회원_조회")
+		public void id로_회원_조회() throws Exception {
+			//Given - setUp에서 저장된 memberName-0 을 이름으로 먼저 조회해 id 획득
+			Member saved = memberService.findOneByName("memberName-0");
+			
+			//When
+			Member found = memberService.findOne(saved.getId());
+			
+			//Then
+			assertThat(found).isNotNull();
+			assertThat(found.getName()).isEqualTo("memberName-0");
+		}
 		
-		//When
-		memberService.join(member1);
+		@Test
+		@DisplayName("이름으로_회원_조회")
+		public void 이름으로_회원_조회() throws Exception {
+			//When
+			Member found = memberService.findOneByName("memberName-5");
+			
+			//Then
+			assertThat(found).isNotNull();
+			assertThat(found.getName()).isEqualTo("memberName-5");
+			assertThat(found.getAddress().getCity()).isEqualTo("city-5");
+		}
 		
-		//Then
-		assertThrows(IllegalStateException.class, () -> memberService.join(member2));
-	}
-	
-	@Test
-	@DisplayName("전체 회원 조회")
-	public void 전체_회원_조회() throws Exception {
-		//Given
-		memberService.join(Member.builder().name("kim").build());
-		memberService.join(Member.builder().name("lee").build());
-		
-		//When
-		List<Member> members = memberService.findMembers();
-		
-		//Then
-		assertEquals(2, members.size());
-		log.info("전체 회원 수={}", members.size());
-	}
-	
-	@Test
-	@DisplayName("id로 회원 조회")
-	public void id로_회원_조회() throws Exception {
-		//Given
-		Member member = Member.builder().name("kim").build();
-		Long   saveId = memberService.join(member);
-		
-		//When
-		Member found = memberService.findOne(saveId);
-		
-		//Then
-		assertNotNull(found);
-		assertEquals("kim", found.getName());
-	}
-	
-	@Test
-	@DisplayName("이름으로 회원 조회")
-	public void 이름으로_회원_조회() throws Exception {
-		//Given
-		memberService.join(Member.builder().name("kim").build());
-		
-		//When
-		Member found = memberService.findOneByName("kim");
-		
-		//Then
-		assertNotNull(found);
-		assertEquals("kim", found.getName());
-	}
-	
-	@Test
-	@DisplayName("존재하지 않는 이름으로 조회시 null반환")
-	public void 존재하지_않는_이름으로_조회시_null반환() throws Exception {
-		//When
-		Member found = memberService.findOneByName("없는사람");
-		
-		//Then
-		assertNull(found);
+		@Test
+		@DisplayName("존재하지_않는_이름으로_조회시_null반환")
+		public void 존재하지_않는_이름으로_조회시_null반환() throws Exception {
+			//When
+			Member found = memberService.findOneByName("없는사람");
+			
+			//Then
+			assertThat(found).isNull();
+		}
 	}
 }

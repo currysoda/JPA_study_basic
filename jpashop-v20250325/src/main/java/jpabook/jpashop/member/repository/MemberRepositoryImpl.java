@@ -33,7 +33,7 @@ public class MemberRepositoryImpl implements MemberRepository {
 		                      .getResultList();
 		if (list.isEmpty())
 		{
-			throw new NoResultException("이름으로 찾을 수 있는 회원이 없습니다." + name);
+			return null;
 		}
 		else
 		{
