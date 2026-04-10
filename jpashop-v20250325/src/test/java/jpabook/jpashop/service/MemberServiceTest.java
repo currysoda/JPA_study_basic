@@ -86,7 +86,7 @@ public class MemberServiceTest {
 			
 			//Then
 			assertThat(memberRepository.findOneByMemberId(saveId)).isEqualTo(member);
-			log.info("저장된 회원 id={}, name={}", saveId, member.getName());
+			log.info("[log.info] 저장된 회원 id = {}, name = {}", saveId, member.getName());
 		}
 		
 		@Test
