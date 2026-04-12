@@ -10,19 +10,19 @@ import jpabook.jpashop.order.entity.OrderItem;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity(name = "Item")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Item extends BaseEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "item_id")
-	@Setter(AccessLevel.NONE)
 	private Long id;
 	
 	@Column(name = "item_name")
@@ -35,11 +35,9 @@ public abstract class Item extends BaseEntity {
 	private Integer stockQuantity;
 	
 	@OneToMany(mappedBy = "item")
-	@Setter(AccessLevel.NONE)
 	private List<CategoryItem> categoryItems = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "item")
-	@Setter(AccessLevel.NONE)
 	private List<OrderItem> orderItems = new ArrayList<>();
 	
 	
